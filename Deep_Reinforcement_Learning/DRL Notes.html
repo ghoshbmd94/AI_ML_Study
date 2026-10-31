@@ -240,6 +240,37 @@ input[type=search]:focus,input[type=range]:focus-visible{outline:2px solid var(-
 @media(max-width:860px){.wrap{padding:18px 16px 72px}.toc{padding:14px}.hero{padding:22px;margin-bottom:38px}.rl-loop{gap:5px;padding:10px}.loop-step{min-height:82px;padding:9px}.loop-step strong{font-size:14px}.loop-step small{font-size:11px}.loop-arrow{font-size:17px}}
 @media(max-width:520px){.bar{padding:10px 14px;gap:8px}.brand{font-size:17px}.course{flex-basis:100%;order:3}.meter{margin-left:auto}.meter i{width:64px}.wrap{padding:12px 12px 60px}.hero{padding:18px}.hero>p{font-size:14px}.rl-loop{grid-template-columns:1fr;gap:7px;padding:10px}.loop-step{min-height:70px;padding:12px}.loop-arrow{height:18px;line-height:18px;transform:rotate(90deg)}.ch{align-items:flex-start}.flow{align-items:stretch}.node{min-width:110px;padding:12px}.btn+.btn{margin-left:4px}}
 @media(prefers-reduced-motion:reduce){.btn:hover:not(:disabled),.seg button:hover:not(:disabled),.opt button:hover:not(:disabled),.opts button:hover:not(:disabled){transform:none}}
+.tic-lesson-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:14px;margin:16px 0}
+.tic-values,.tic-tree-card{min-width:0}
+.tic-visual-title{margin:0 0 4px;font:700 18px "Bricolage Grotesque","Instrument Sans",sans-serif}
+.tic-visual-intro{margin:0 0 14px;color:var(--mute);font-size:13px}
+.tic-state-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tic-state{min-width:0;padding:10px;border:1px solid var(--line);border-radius:5px;background:var(--bg)}
+.tic-state figcaption{min-height:34px;margin-bottom:8px;font-size:12px;font-weight:700;line-height:1.35}
+.tic-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:min(100%,112px);margin:0 auto 8px;aspect-ratio:1;border:1px solid var(--line);background:var(--card)}
+.tic-mark{display:grid;place-items:center;min-width:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font:700 19px "Bricolage Grotesque","Instrument Sans",sans-serif}
+.tic-mark:nth-child(3n){border-right:0}.tic-mark:nth-child(n+7){border-bottom:0}
+.tic-mark.x{color:var(--S)}.tic-mark.o{color:var(--A)}
+.tic-value{display:block;text-align:center;font:600 14px "JetBrains Mono",monospace}
+.tic-value.neutral{color:var(--mute)}.tic-value.win{color:var(--S)}.tic-value.loss{color:var(--A)}
+.tic-state-note{display:block;margin-top:3px;color:var(--mute);font-size:11px;text-align:center}
+.tic-outcome-key{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tic-outcome-key span{padding:5px 8px;border-radius:4px;background:var(--Sb);font-size:11px}
+.tic-outcome-key span:last-child{background:var(--Ab)}
+.tic-tree{display:grid;gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.tic-tree li{position:relative;display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:5px;background:var(--bg)}
+.tic-tree li+li:before{position:absolute;top:-9px;left:48px;height:8px;border-left:1px dashed var(--mute);content:""}
+.tic-turn{font-size:11px;font-weight:700;color:var(--mute);text-transform:uppercase}
+.tic-event{font-size:13px;line-height:1.45}
+.tic-options{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.tic-option{display:grid;gap:2px;min-width:64px;padding:5px 8px;border:1px dashed var(--line);border-radius:4px;color:var(--mute);font:500 11px "JetBrains Mono",monospace;text-align:center}
+.tic-option small{font:500 10px "Instrument Sans",sans-serif}
+.tic-option.chosen{border:1px solid var(--S);background:var(--Sb);color:var(--S)}
+.tic-tree-note,.tic-update-example{margin:12px 0 0;padding:12px 14px;border-left:3px solid var(--A);border-radius:0 5px 5px 0;background:var(--Ab);font-size:13px}
+.tic-tree-note b,.tic-update-example b{color:var(--A)}
+.tic-update-example code{font:600 13px "JetBrains Mono",monospace;white-space:nowrap}
+@media(max-width:860px){.tic-lesson-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.tic-state-grid{gap:5px}.tic-state{padding:7px 4px}.tic-state figcaption{font-size:10px}.tic-board{width:min(100%,88px)}.tic-mark{font-size:16px}.tic-tree li{grid-template-columns:76px minmax(0,1fr);gap:6px;padding:8px}.tic-turn{font-size:10px}}
 </style>
 </head>
 <body>
@@ -361,10 +392,35 @@ input[type=search]:focus,input[type=range]:focus-visible{outline:2px solid var(-
 <p>Tic-tac-toe has states, actions, rewards, delayed consequences and a clear goal. A board position is a state and a legal move is an action. In the simple textbook setup a win gives reward 1, while a loss or draw gives 0.</p>
 <p>The value-function approach gives every board position a number that estimates the probability of winning from it. Winning states start at 1, lost or drawn terminal states at 0, and all other states at a neutral 0.5. During play the agent usually picks the move leading to the highest-valued next state (a greedy move) and occasionally picks another move to explore.</p>
 
+<div class="tic-lesson-grid">
+<article class="card tic-values">
+<h4 class="tic-visual-title">What does a state value mean?</h4>
+<p class="tic-visual-intro">Here X is the learning agent. Each board is one state; the value estimates X's chance of eventually winning from that position.</p>
+<div class="tic-state-grid">
+<figure class="tic-state"><figcaption>Ongoing game<br>initial estimate</figcaption><div class="tic-board" role="img" aria-label="Ongoing tic-tac-toe board: X in the top-left, O in the top-middle, X in the center, O in the bottom-right"><span class="tic-mark x">X</span><span class="tic-mark o">O</span><span class="tic-mark"></span><span class="tic-mark"></span><span class="tic-mark x">X</span><span class="tic-mark"></span><span class="tic-mark"></span><span class="tic-mark"></span><span class="tic-mark o">O</span></div><b class="tic-value neutral">V(s) = 0.5</b><small class="tic-state-note">neutral starting estimate</small></figure>
+<figure class="tic-state"><figcaption>Terminal X win<br>goal reached</figcaption><div class="tic-board" role="img" aria-label="Tic-tac-toe board with X winning across the top row"><span class="tic-mark x">X</span><span class="tic-mark x">X</span><span class="tic-mark x">X</span><span class="tic-mark o">O</span><span class="tic-mark o">O</span><span class="tic-mark"></span><span class="tic-mark"></span><span class="tic-mark"></span><span class="tic-mark"></span></div><b class="tic-value win">V(s) = 1</b><small class="tic-state-note">X has won</small></figure>
+<figure class="tic-state"><figcaption>Terminal O win<br>X did not win</figcaption><div class="tic-board" role="img" aria-label="Tic-tac-toe board with O winning across the top row"><span class="tic-mark o">O</span><span class="tic-mark o">O</span><span class="tic-mark o">O</span><span class="tic-mark x">X</span><span class="tic-mark x">X</span><span class="tic-mark"></span><span class="tic-mark"></span><span class="tic-mark x">X</span><span class="tic-mark"></span></div><b class="tic-value loss">V(s) = 0</b><small class="tic-state-note">loss (draw also 0 here)</small></figure>
+</div>
+<div class="tic-outcome-key"><span><b>Nonterminal:</b> start at 0.5</span><span><b>Terminal:</b> X win = 1; loss or draw = 0</span></div>
+</article>
+<article class="card tic-tree-card">
+<h4 class="tic-visual-title">How a game becomes learning</h4>
+<p class="tic-visual-intro">Turns alternate. The opponent is part of the environment; X evaluates its legal next states on its own turns.</p>
+<ol class="tic-tree">
+<li><span class="tic-turn">Opponent</span><div class="tic-event">Environment makes a reply, taking the game from state <b>a</b> to <b>b</b>.</div></li>
+<li><span class="tic-turn">X chooses</span><div class="tic-event">Compare values of the states that each legal move would create.<div class="tic-options"><span class="tic-option">c<small>V = 0.48</small></span><span class="tic-option chosen">c*<small>V = 0.72</small></span><span class="tic-option">c<small>V = 0.61</small></span></div></div></li>
+<li><span class="tic-turn">Opponent</span><div class="tic-event">The environment replies again; the game reaches state <b>d</b>.</div></li>
+<li><span class="tic-turn">X chooses</span><div class="tic-event">X repeats the comparison and usually takes the highest-valued successor, such as <b>e*</b>.<div class="tic-options"><span class="tic-option">e<small>alternative</small></span><span class="tic-option chosen">e*<small>greedy choice</small></span><span class="tic-option">e<small>alternative</small></span></div></div></li>
+</ol>
+<p class="tic-tree-note"><b>Greedy vs. explore:</b> with probability 1 &minus; &epsilon;, choose the legal move whose next state has the highest value. With probability &epsilon;, try another legal move. Exploration can reveal a better line than the current estimates suggest. The values above are illustrative.</p>
+</article>
+</div>
+
 <h3>The temporal-difference rule</h3>
 <p>Let S<sub>t</sub> be the state before a greedy move and S<sub>t+1</sub> the state after it. With step size &alpha;:</p>
 <div class="math">V(S<sub>t</sub>) &larr; V(S<sub>t</sub>) + &alpha; [ V(S<sub>t+1</sub>) &minus; V(S<sub>t</sub>) ]</div>
 <p>The bracket is the temporal-difference part. The earlier state&rsquo;s value moves part of the way toward the later state&rsquo;s value.</p>
+<div class="tic-update-example"><b>Example:</b> if V(S<sub>t</sub>) = 0.50, the next state is a win with value 1, and &alpha; = 0.10, then <code>0.50 + 0.10 x (1 - 0.50) = 0.55</code>. The old estimate moves 10% toward the new one; it does not jump straight to 1. If the eventual outcome is a loss or draw (value 0), the same update moves it down to 0.45.</div>
 
 <h3>Try the update</h3>
 <div class="seg" id="tdp"></div>
