@@ -269,6 +269,16 @@ input[type=search]:focus,input[type=range]:focus-visible{outline:2px solid var(-
 .tic-tree-note,.tic-update-example{margin:12px 0 0;padding:12px 14px;border-left:3px solid var(--A);border-radius:0 5px 5px 0;background:var(--Ab);font-size:13px}
 .tic-tree-note b,.tic-update-example b{color:var(--A)}
 .tic-update-example code{font:600 13px "JetBrains Mono",monospace;white-space:nowrap}
+.tic-modes{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0 8px}
+.tic-modes-label{width:100%;font-size:12px;font-weight:700;color:var(--mute)}
+.tic-mode{padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:600 12px "Instrument Sans",sans-serif;cursor:pointer}
+.tic-mode[aria-pressed="true"]{border-color:var(--S);background:var(--Sb);color:var(--S)}
+.tic-mode:hover{border-color:var(--S)}
+.tic-option{font-family:"JetBrains Mono",monospace;cursor:pointer;transition:background .16s ease,border-color .16s ease,color .16s ease}
+.tic-option:hover{border-color:var(--S);color:var(--S)}
+.tic-option:focus-visible,.tic-mode:focus-visible{outline:2px solid var(--A);outline-offset:2px}
+.tic-feedback{min-height:44px;margin:10px 0 0;padding:10px 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);font-size:13px}
+.tic-feedback b{color:var(--S)}
 @media(max-width:860px){.tic-lesson-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.tic-state-grid{gap:5px}.tic-state{padding:7px 4px}.tic-state figcaption{font-size:10px}.tic-board{width:min(100%,88px)}.tic-mark{font-size:16px}.tic-tree li{grid-template-columns:76px minmax(0,1fr);gap:6px;padding:8px}.tic-turn{font-size:10px}}
 </style>
@@ -406,12 +416,14 @@ input[type=search]:focus,input[type=range]:focus-visible{outline:2px solid var(-
 <article class="card tic-tree-card">
 <h4 class="tic-visual-title">How a game becomes learning</h4>
 <p class="tic-visual-intro">Turns alternate. The opponent is part of the environment; X evaluates its legal next states on its own turns.</p>
+<div class="tic-modes" role="group" aria-label="Choose how X selects a move"><span class="tic-modes-label">Try a move-selection strategy</span><button class="tic-mode" type="button" data-tic-mode="greedy" aria-pressed="true">Greedy: highest value</button><button class="tic-mode" type="button" data-tic-mode="explore" aria-pressed="false">Explore: try an alternative</button></div>
 <ol class="tic-tree">
 <li><span class="tic-turn">Opponent</span><div class="tic-event">Environment makes a reply, taking the game from state <b>a</b> to <b>b</b>.</div></li>
-<li><span class="tic-turn">X chooses</span><div class="tic-event">Compare values of the states that each legal move would create.<div class="tic-options"><span class="tic-option">c<small>V = 0.48</small></span><span class="tic-option chosen">c*<small>V = 0.72</small></span><span class="tic-option">c<small>V = 0.61</small></span></div></div></li>
+<li><span class="tic-turn">X chooses</span><div class="tic-event">Compare values of the states that each legal move would create.<div class="tic-options"><button class="tic-option" type="button" data-tic-action="c" data-tic-value="0.48" aria-pressed="false">c<small>V = 0.48</small></button><button class="tic-option chosen" type="button" data-tic-action="c*" data-tic-value="0.72" aria-pressed="true">c*<small>V = 0.72</small></button><button class="tic-option" type="button" data-tic-action="c" data-tic-value="0.61" aria-pressed="false">c<small>V = 0.61</small></button></div></div></li>
 <li><span class="tic-turn">Opponent</span><div class="tic-event">The environment replies again; the game reaches state <b>d</b>.</div></li>
 <li><span class="tic-turn">X chooses</span><div class="tic-event">X repeats the comparison and usually takes the highest-valued successor, such as <b>e*</b>.<div class="tic-options"><span class="tic-option">e<small>alternative</small></span><span class="tic-option chosen">e*<small>greedy choice</small></span><span class="tic-option">e<small>alternative</small></span></div></div></li>
 </ol>
+<p class="tic-feedback" id="tic-feedback" aria-live="polite"><b>Greedy choice:</b> c* has the highest estimated value (0.72), so X selects it.</p>
 <p class="tic-tree-note"><b>Greedy vs. explore:</b> with probability 1 &minus; &epsilon;, choose the legal move whose next state has the highest value. With probability &epsilon;, try another legal move. Exploration can reveal a better line than the current estimates suggest. The values above are illustrative.</p>
 </article>
 </div>
@@ -660,6 +672,34 @@ $('#tdp').innerHTML=TD.map(t=>'<button>'+t[0]+'</button>').join('');
 $$('#tdp button').forEach((b,i)=>b.onclick=()=>{$$('#tdp button').forEach((x,j)=>x.classList.toggle('on',j===i));$('#v0').value=TD[i][1];$('#v1').value=TD[i][2];$('#av').value=TD[i][3];drawTD()});
 ['v0','v1','av'].forEach(id=>$('#'+id).oninput=()=>{$$('#tdp button').forEach(x=>x.classList.remove('on'));drawTD()});
 drawTD();
+
+/* interactive greedy-versus-exploration example */
+const ticMoves=$$('.tic-option[data-tic-action]');
+const ticModes=$$('.tic-mode');
+const ticFeedback=$('#tic-feedback');
+let ticMode='greedy';
+const ticBestIndex=()=>ticMoves.reduce((best,b,i)=>+b.dataset.ticValue>+ticMoves[best].dataset.ticValue?i:best,0);
+function showTicChoice(index,message){
+  ticMoves.forEach((b,i)=>{const selected=i===index;b.classList.toggle('chosen',selected);b.setAttribute('aria-pressed',String(selected))});
+  ticFeedback.textContent=message;
+}
+function setTicMode(mode){
+  ticMode=mode;ticModes.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ticMode===mode)));
+  const best=ticBestIndex(),bestMove=ticMoves[best],bestName=bestMove.dataset.ticAction,bestValue=bestMove.dataset.ticValue;
+  if(mode==='greedy')showTicChoice(best,'Greedy: choose '+bestName+', whose estimated value ('+bestValue+') is highest.');
+  else{
+    const alternatives=ticMoves.map((b,i)=>i).filter(i=>i!==best),choice=alternatives[Math.random()*alternatives.length|0],move=ticMoves[choice];
+    showTicChoice(choice,'Explore: try '+move.dataset.ticAction+' (value '+move.dataset.ticValue+') instead of always choosing '+bestName+'. This can reveal whether the current estimates are wrong.');
+  }
+}
+ticModes.forEach(b=>b.addEventListener('click',()=>setTicMode(b.dataset.ticMode)));
+ticMoves.forEach((b,i)=>b.addEventListener('click',()=>{
+  const best=ticBestIndex(),bestMove=ticMoves[best];
+  if(ticMode==='greedy'&&i!==best)showTicChoice(i,'This is a legal move, but it is not greedy. '+bestMove.dataset.ticAction+' currently has the highest estimated value ('+bestMove.dataset.ticValue+').');
+  else if(i===best)showTicChoice(i,'You chose '+b.dataset.ticAction+', currently the highest-valued move. Exploration can also choose it by chance.');
+  else showTicChoice(i,'You explored '+b.dataset.ticAction+' (value '+b.dataset.ticValue+'). Trying alternatives can improve the value estimates over many games.');
+}));
+setTicMode('greedy');
 
 /* 6: tic-tac-toe trainer */
 const W=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
