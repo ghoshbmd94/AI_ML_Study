@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f1">
+  <meta name="description" content="An interactive map for exploring artificial intelligence and machine learning, starting with reinforcement learning.">
+  <title>AI / ML Study Lab</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f7f1;
+      --ink: #17231e;
+      --muted: #62706a;
+      --green: #2f7557;
+      --green-dark: #184a36;
+      --lime: #d7ed8a;
+      --coral: #e8795c;
+      --line: #dce3da;
+      --panel: #fffefa;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Trebuchet MS", "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 87% 2%, rgba(215, 237, 138, .28), transparent 25rem),
+        linear-gradient(180deg, #f8f9f4 0%, var(--paper) 48%, #eef3eb 100%);
+      font-family: var(--sans);
+    }
+    a { color: inherit; }
+    .shell { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { display: flex; align-items: center; gap: 11px; font-size: 13px; font-weight: 700; }
+    .mark {
+      display: grid;
+      width: 31px;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 9px;
+      color: #fff;
+      background: var(--green-dark);
+      font-family: var(--serif);
+      font-size: 18px;
+    }
+    .top-link { color: var(--muted); font-size: 13px; text-decoration: none; }
+    .top-link:hover { color: var(--green-dark); }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, .92fr);
+      gap: 62px;
+      align-items: center;
+      padding: 75px 0 58px;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 20px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 22px; height: 1px; background: currentColor; content: ""; }
+    h1 {
+      max-width: 580px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: .99;
+    }
+    h1 em { color: var(--green); font-weight: 400; }
+    .intro { max-width: 450px; margin: 23px 0 28px; color: var(--muted); font-size: 15px; line-height: 1.75; }
+    .primary-link {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      gap: 15px;
+      padding: 0 17px;
+      border-radius: 5px;
+      color: #fff;
+      background: var(--green-dark);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .primary-link:hover { transform: translateY(-2px); background: var(--green); }
+    .primary-link svg { width: 15px; height: 15px; }
+    .hero-art {
+      position: relative;
+      min-height: 324px;
+      overflow: hidden;
+      border: 1px solid #dfe7d9;
+      border-radius: 8px;
+      background: rgba(255, 254, 250, .76);
+      box-shadow: 0 18px 50px rgba(35, 67, 48, .07);
+      animation: rise .75s both;
+    }
+    .art-label { position: absolute; top: 20px; left: 22px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+    .loop { position: absolute; inset: 52px 10px 24px; width: calc(100% - 20px); height: calc(100% - 76px); }
+    .loop path { fill: none; stroke: #b7c8b7; stroke-width: 1.5; stroke-dasharray: 4 6; }
+    .loop .node { stroke: #fffefa; stroke-width: 4; }
+    .loop .agent { fill: var(--green); }
+    .loop .environment { fill: #dceba9; }
+    .loop .reward { fill: #f3b49e; }
+    .loop .update { fill: #b7d4c2; }
+    .loop text { fill: var(--ink); font-family: var(--sans); font-size: 12px; font-weight: 700; text-anchor: middle; }
+    .loop .small { fill: var(--muted); font-size: 10px; font-weight: 400; }
+    .orbit-dot { animation: pulse 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 29px 0 16px; border-top: 1px solid var(--line); }
+    .section-heading h2 { margin: 0; font-family: var(--serif); font-size: 29px; font-weight: 400; }
+    .section-heading p { margin: 0 0 3px; color: var(--muted); font-size: 12px; }
+    .learning-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 16px; padding-bottom: 54px; }
+    .feature, .next-card { min-height: 210px; padding: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+    .feature { display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(130deg, #fffefa 57%, #edf4e8 100%); }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .tag { color: var(--green); font-size: 10px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+    .feature h3, .next-card h3 { margin: 10px 0 8px; font-family: var(--serif); font-size: 27px; font-weight: 400; }
+    .feature p, .next-card p { max-width: 460px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .index-number { color: #9baa9d; font-family: var(--serif); font-size: 14px; }
+    .feature-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 24px; }
+    .topic-list { display: flex; flex-wrap: wrap; gap: 7px; }
+    .topic-list span { padding: 6px 9px; border: 1px solid #dce5d8; border-radius: 3px; color: #54645a; font-size: 10px; }
+    .text-link { display: inline-flex; align-items: center; gap: 7px; color: var(--green-dark); font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .text-link:hover { color: var(--coral); }
+    .text-link svg { width: 14px; height: 14px; }
+    .next-card { position: relative; overflow: hidden; background: #e9f0e5; }
+    .next-card::after { position: absolute; right: -24px; bottom: -50px; width: 170px; height: 170px; border: 1px solid #c5d5c3; border-radius: 50%; box-shadow: 0 0 0 18px #e9f0e5, 0 0 0 19px #c5d5c3, 0 0 0 39px #e9f0e5, 0 0 0 40px #c5d5c3; content: ""; opacity: .8; }
+    .next-card > * { position: relative; z-index: 1; }
+    .next-card .tag { color: #a4513b; }
+    .next-card h3 { max-width: 250px; font-size: 24px; }
+    .next-card p { max-width: 260px; }
+    .footer { display: flex; justify-content: space-between; gap: 20px; padding: 18px 0 26px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: .45; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.15); } }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; gap: 30px; padding: 55px 0 40px; }
+      .hero-art { min-height: 285px; }
+      .learning-grid { grid-template-columns: 1fr; }
+      .feature { min-height: 235px; }
+    }
+    @media (max-width: 480px) {
+      .shell { width: min(100% - 32px, 1120px); }
+      .topbar { min-height: 64px; }
+      .top-link { font-size: 11px; }
+      h1 { font-size: 49px; }
+      .hero-art { min-height: 255px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 7px; }
+      .feature, .next-card { padding: 20px; }
+      .feature-bottom { align-items: flex-start; flex-direction: column; }
+      .footer { flex-direction: column; gap: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="wordmark" href="./index.html" aria-label="AI and ML Study Lab home">
+      <span class="mark" aria-hidden="true">A</span>
+      <span>AI / ML <span style="color: var(--muted); font-weight: 400">STUDY LAB</span></span>
+    </a>
+    <a class="top-link" href="./Deep_Reinforcement_Learning/DRL%20Notes.html">Explore the notes <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">A field guide to intelligent systems</p>
+        <h1 id="page-title">Make sense of <em>machine learning.</em></h1>
+        <p class="intro">A growing collection of visual notes and ideas across AI and machine learning. Start with the systems that learn by doing.</p>
+        <a class="primary-link" href="./Deep_Reinforcement_Learning/DRL%20Notes.html">
+          Open reinforcement learning notes
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="hero-art" role="img" aria-label="Reinforcement learning cycle: agent observes the environment, takes an action, receives a reward, and updates its policy.">
+        <span class="art-label">The learning loop · reinforcement learning</span>
+        <svg class="loop" viewBox="0 0 460 260" aria-hidden="true">
+          <defs>
+            <marker id="arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0 7 3.5 0 7" fill="none" stroke="#9db39f" stroke-width="1.2"/></marker>
+          </defs>
+          <path d="M153 75 C195 36 264 36 306 75" marker-end="url(#arrow)"/>
+          <path d="M335 106 C367 141 357 179 322 199" marker-end="url(#arrow)"/>
+          <path d="M278 218 C232 239 174 229 145 199" marker-end="url(#arrow)"/>
+          <path d="M116 170 C92 137 101 103 131 82" marker-end="url(#arrow)"/>
+          <circle class="node agent" cx="130" cy="72" r="39"/>
+          <circle class="node environment" cx="328" cy="82" r="39"/>
+          <circle class="node reward" cx="314" cy="196" r="39"/>
+          <circle class="node update" cx="132" cy="190" r="39"/>
+          <text x="130" y="69" fill="#fffefa">AGENT</text>
+          <text class="small" x="130" y="85" fill="#e2f0e5">policy π</text>
+          <text x="328" y="79">WORLD</text>
+          <text class="small" x="328" y="95">state sₜ</text>
+          <text x="314" y="193">REWARD</text>
+          <text class="small" x="314" y="209">signal rₜ</text>
+          <text x="132" y="187">UPDATE</text>
+          <text class="small" x="132" y="203">learn value</text>
+          <circle class="orbit-dot" cx="226" cy="42" r="4" fill="#e8795c"/>
+          <text class="small" x="228" y="22">action aₜ</text>
+          <text class="small" x="404" y="150">experience</text>
+          <text class="small" x="218" y="252">improve the next decision</text>
+        </svg>
+      </div>
+    </section>
+
+    <section aria-labelledby="library-title">
+      <div class="section-heading">
+        <h2 id="library-title">Study paths</h2>
+        <p>One idea at a time, connected to the bigger picture.</p>
+      </div>
+      <div class="learning-grid">
+        <article class="feature">
+          <div class="card-top">
+            <div>
+              <span class="tag">01 · Available now</span>
+              <h3>Deep reinforcement learning</h3>
+              <p>How an agent learns to choose actions, balance reward and exploration, and improve through experience.</p>
+            </div>
+            <span class="index-number">01 / 01</span>
+          </div>
+          <div class="feature-bottom">
+            <div class="topic-list" aria-label="Topics">
+              <span>Agent &amp; environment</span><span>Rewards</span><span>Learning</span>
+            </div>
+            <a class="text-link" href="./Deep_Reinforcement_Learning/DRL%20Notes.html">
+              Read the notes
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </article>
+        <aside class="next-card">
+          <span class="tag">The collection grows</span>
+          <h3>More ideas, added as they click.</h3>
+          <p>Keep this page as your starting point for the concepts ahead.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <span>AI / ML Study Lab</span>
+    <span>Explore carefully. Connect the ideas.</span>
+  </footer>
+</body>
+</html>
