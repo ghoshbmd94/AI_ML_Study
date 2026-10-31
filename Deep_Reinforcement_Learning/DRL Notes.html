@@ -197,6 +197,49 @@ html{scroll-padding-top:90px}
 .tp.shut>.gt,.gt li.shut>ul{display:none}
 .tp.act>.sr .tl{color:var(--A)}
 .tp:not(#tp1) .tl{font-weight:600;font-size:13.5px}
+
+:root{--bg:#f3f5ef;--card:#fffefa;--ink:#1d3028;--mute:#64736b;--line:#d8e1d8;--S:#26735a;--A:#c45f45;--R:#a56f18;--Sb:#e2f1e8;--Ab:#fae9e3;--Rb:#f7efda}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111a16;--card:#19251f;--ink:#e7eee8;--mute:#a5b2a8;--line:#304139;--S:#72c69f;--A:#f09175;--R:#e7bd65;--Sb:#203b30;--Ab:#402923;--Rb:#3d331e}}
+:root[data-theme="dark"]{--bg:#111a16;--card:#19251f;--ink:#e7eee8;--mute:#a5b2a8;--line:#304139;--S:#72c69f;--A:#f09175;--R:#e7bd65;--Sb:#203b30;--Ab:#402923;--Rb:#3d331e}
+body{background:radial-gradient(ellipse at 86% 0%,color-mix(in srgb,var(--S) 8%,transparent),transparent 30rem),var(--bg);line-height:1.7}
+.bar{gap:16px;padding:12px max(24px,calc((100vw - 1280px)/2));box-shadow:0 1px 0 color-mix(in srgb,var(--line) 75%,transparent)}
+.brand{font-size:20px;letter-spacing:0}
+.course{font-size:13px}
+.meter{font-variant-numeric:tabular-nums}
+.meter i{width:112px;height:7px}
+.wrap{max-width:1280px;grid-template-columns:260px minmax(0,1fr);gap:40px;padding:32px 32px 100px}
+.toc{top:calc(76px + env(safe-area-inset-top,0px));max-height:calc(100vh - 100px);padding:16px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);box-shadow:0 10px 32px color-mix(in srgb,var(--ink) 4%,transparent)}
+.ch{padding:0 4px 10px;border-bottom:1px solid var(--line)}
+#toc{margin:10px 0 0}
+#toc>li{margin-bottom:6px}
+#toc a{padding:6px 9px;border-radius:0 5px 5px 0;border-left-width:3px;line-height:1.45}
+#toc li li a{font-size:13px}
+.hero{margin:0 0 54px;padding:30px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(135deg,var(--card) 0%,color-mix(in srgb,var(--S) 6%,var(--card)) 100%);box-shadow:0 16px 40px color-mix(in srgb,var(--ink) 5%,transparent)}
+.hero h1{max-width:760px;font-size:clamp(34px,4vw,50px);line-height:1.04}
+.hero>p{max-width:690px;color:var(--mute);font-size:16px}
+.leg{margin:18px 0 22px}
+.leg span{font-size:12px;padding:5px 12px}
+.rl-loop{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,1fr);align-items:center;gap:8px;padding:16px;border:1px solid var(--line);border-radius:6px;background:color-mix(in srgb,var(--bg) 62%,var(--card))}
+.loop-step{min-width:0;min-height:94px;display:grid;align-content:center;gap:4px;padding:12px;border:1px solid var(--line);border-top:3px solid var(--S);border-radius:5px;background:var(--card)}
+.loop-step.action{border-top-color:var(--A)}
+.loop-step.reward{border-top-color:var(--R)}
+.loop-step .loop-index{font:500 10px "JetBrains Mono",monospace;color:var(--mute)}
+.loop-step strong{font:700 15px "Bricolage Grotesque","Instrument Sans",sans-serif}
+.loop-step small{color:var(--mute);font-size:12px;line-height:1.35}
+.loop-arrow{color:var(--mute);text-align:center;font-size:20px}
+#m1>section{padding-top:28px;border-top:1px solid var(--line);margin-bottom:54px}
+#m1>section h2{font-size:clamp(24px,3vw,30px);line-height:1.2}
+#m1>section h2::before{background:var(--S);border-radius:4px;font-size:12px}
+h3{margin-top:30px}
+blockquote{margin:18px 0;padding:16px 20px;border-left:4px solid var(--A);border-radius:0 6px 6px 0;background:var(--Ab);font-size:17px}
+.card,.feature,.next-card,.apps div,.gl div,details.q{border-radius:6px}
+.card{padding:20px}
+.seg button,.btn,.opt button,.opts button{transition:background .16s ease,color .16s ease,border-color .16s ease,transform .16s ease}
+.btn:hover:not(:disabled),.seg button:hover:not(:disabled),.opt button:hover:not(:disabled),.opts button:hover:not(:disabled){transform:translateY(-1px)}
+input[type=search]:focus,input[type=range]:focus-visible{outline:2px solid var(--A);outline-offset:2px}
+@media(max-width:860px){.wrap{padding:18px 16px 72px}.toc{padding:14px}.hero{padding:22px;margin-bottom:38px}.rl-loop{gap:5px;padding:10px}.loop-step{min-height:82px;padding:9px}.loop-step strong{font-size:14px}.loop-step small{font-size:11px}.loop-arrow{font-size:17px}}
+@media(max-width:520px){.bar{padding:10px 14px;gap:8px}.brand{font-size:17px}.course{flex-basis:100%;order:3}.meter{margin-left:auto}.meter i{width:64px}.wrap{padding:12px 12px 60px}.hero{padding:18px}.hero>p{font-size:14px}.rl-loop{grid-template-columns:1fr;gap:7px;padding:10px}.loop-step{min-height:70px;padding:12px}.loop-arrow{height:18px;line-height:18px;transform:rotate(90deg)}.ch{align-items:flex-start}.flow{align-items:stretch}.node{min-width:110px;padding:12px}.btn+.btn{margin-left:4px}}
+@media(prefers-reduced-motion:reduce){.btn:hover:not(:disabled),.seg button:hover:not(:disabled),.opt button:hover:not(:disabled),.opts button:hover:not(:disabled){transform:none}}
 </style>
 </head>
 <body>
@@ -213,6 +256,15 @@ html{scroll-padding-top:90px}
 <h1>Introduction to Reinforcement Learning</h1>
 <p>Session 1 of 16, restructured from the course lecture notes. Follow the index, try the interactive parts, mark each section as done, and finish with the exam questions and self-check.</p>
 <div class="leg"><span class="S">State</span><span class="A">Action</span><span class="R">Reward</span></div>
+<div class="rl-loop" role="img" aria-label="Reinforcement learning cycle: observe the state, choose an action, receive reward and a new state, then update the policy.">
+<div class="loop-step"><span class="loop-index">01 / OBSERVE</span><strong>Read the state</strong><small>Current situation, S<sub>t</sub></small></div>
+<span class="loop-arrow" aria-hidden="true">&rarr;</span>
+<div class="loop-step action"><span class="loop-index">02 / DECIDE</span><strong>Choose an action</strong><small>Policy selects A<sub>t</sub></small></div>
+<span class="loop-arrow" aria-hidden="true">&rarr;</span>
+<div class="loop-step reward"><span class="loop-index">03 / RESPOND</span><strong>Environment reacts</strong><small>Reward R<sub>t+1</sub> + next state</small></div>
+<span class="loop-arrow" aria-hidden="true">&rarr;</span>
+<div class="loop-step"><span class="loop-index">04 / IMPROVE</span><strong>Update behavior</strong><small>Learn from experience</small></div>
+</div>
 </div>
 
 <section id="s1">
